@@ -23,23 +23,15 @@ jobs:
       - name: Move files to deploy
         run: |
           mkdir deploy
-          mkdir deploy/dev
-          cp index.html deploy/dev/index.html
-          cp script.js deploy/dev/script.js
-          cp style.css deploy/dev/style.css
-
-      - name: GCP Cloud Storage Deploy
-        uses: abinmn/gcp-storage-bucket-action@v1.0
+          cp index.html deploy/index.html
+          cp script.js deploy/script.js
+          cp style.css deploy/style.css
+      
+      - name: Cloud Storage Uploader
+        uses: google-github-actions/upload-cloud-storage@v0.2.0
         with:
-          # GCP service key encoded as base64. The account associated with the key should have permissions to make changes in storage bucket.
-          service_key: ${{secrets.GCP_BUCKET_SECRET}}
-          # The folder you want to deploy. Default is the repository. You can change this value if you have a build step and point this to that build folder.
-          build_folder: "deploy/"
-          # Bucket name
-          bucket_name: "git-basics-hosting"
-          # Name of the project that contains the storage bucket.
-          project: "linus-playground-259422"
-          # Path of your homepage in cloud storage bucket.
-          home_page_path: "index.html"
-          # Path of the 404 page to be shown
-          error_page_path: "index.html"
+          credentials: ${{secrets.GCP_BUCKET_SECRET}}
+          # The path to a file or folder inside the action's filesystem that should be uploaded to the bucket. You can specify either the absolute path or the relative path from the action.
+          path: deploy
+          # GCS bucket name of form <bucketname> or with an optional prefix of form <bucketname>/<prefix>
+          destination: git-basics-hosting/dev
