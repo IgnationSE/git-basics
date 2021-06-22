@@ -1,0 +1,44 @@
+name: Dev-CI
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  create:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a set of commands using the runners shell
+      - name: Move files to deploy
+        run: |
+          mkdir deploy
+          cp index.html deploy/index.html
+          cp script.js deploy/script.js
+          cp style.css deploy/style.css
+
+      - name: GCP Cloud Storage Deploy
+        uses: abinmn/gcp-storage-bucket-action@v1.0
+        with:
+          # GCP service key encoded as base64. The account associated with the key should have permissions to make changes in storage bucket.
+          service_key: ${{secrets.GCP_BUCKET_SECRET}}
+          # The folder you want to deploy. Default is the repository. You can change this value if you have a build step and point this to that build folder.
+          build_folder: "deploy/"
+          # Bucket name
+          bucket_name: "git-basics-hosting"
+          # Name of the project that contains the storage bucket.
+          project: "linus-playground-259422"
+          # Path of your homepage in cloud storage bucket.
+          home_page_path: "index.html"
+          # Path of the 404 page to be shown
+          error_page_path: "index.html"
