@@ -47,4 +47,4 @@ jobs:
       - name: Set Low Cache Control
         env:
           BUCKET: git-basics-hosting
-        run: gsutil -m setmeta -h "Cache-Control:public, max-age=10" gs://$BUCKET/*
+        run: gsutil -m setmeta -r -h "Cache-Control:public, max-age=10" gs://$BUCKET/*
