@@ -22,19 +22,19 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Move files to deploy
         run: |
-          mkdir "$GITHUB_WORKSPACE/deploy"
-          mkdir "$GITHUB_WORKSPACE/deploy/dev"
-          cp "$GITHUB_WORKSPACE/index.html" "$GITHUB_WORKSPACE/deploy/dev/index.html"
-          cp "$GITHUB_WORKSPACE/script.js" "$GITHUB_WORKSPACE/deploy/dev/script.js"
-          cp "$GITHUB_WORKSPACE/style.css" "$GITHUB_WORKSPACE/deploy/dev/style.css"
+          mkdir deploy
+          mkdir deploy/dev
+          cp index.html deploy/dev/index.html
+          cp script.js deploy/dev/script.js
+          cp style.css deploy/dev/style.css
 
       - name: GCP Cloud Storage Deploy
         uses: abinmn/gcp-storage-bucket-action@v1.0
         with:
           # GCP service key encoded as base64. The account associated with the key should have permissions to make changes in storage bucket.
-          service_key: "{{secrets.GCP_BUCKET_SECRET}}"
+          service_key: ${{secrets.GCP_BUCKET_SECRET}}
           # The folder you want to deploy. Default is the repository. You can change this value if you have a build step and point this to that build folder.
-          build_folder: "$GITHUB_WORKSPACE/deploy"
+          build_folder: "deploy/"
           # Bucket name
           bucket_name: "git-basics-hosting"
           # Name of the project that contains the storage bucket.
