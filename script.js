@@ -1,3 +1,3 @@
 window.onload = function() {
-  document.getElementById("mainTitle").textContent = "Mate"
+  document.getElementById("mainTitle").textContent = "What is this madness?"
 }
