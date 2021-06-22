@@ -21,9 +21,8 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Move files to deploy
-        env:
-          TAG_NAME: ${{github.ref}}
         run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
           mkdir deploy
           mkdir "deploy/$TAG_NAME"
           cp index.html "deploy/$TAG_NAME/index.html"
