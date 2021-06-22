@@ -32,6 +32,6 @@ jobs:
         with:
           credentials: ${{secrets.GCP_BUCKET_SECRET}}
           # The path to a file or folder inside the action's filesystem that should be uploaded to the bucket. You can specify either the absolute path or the relative path from the action.
-          path: ./deploy/
+          path: ${{ github.workspace }}/deploy
           # GCS bucket name of form <bucketname> or with an optional prefix of form <bucketname>/<prefix>
           destination: git-basics-hosting/dev
